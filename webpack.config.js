@@ -9,6 +9,15 @@ module.exports = {
         filename: 'bundle.js',
         path: path.resolve(__dirname, 'dist')
     },
+    devServer: {
+        contentBase: path.resolve(__dirname, 'dist'),
+        port: 4200
+    },
+
+    // devServer: {
+    //     overlay: true,
+    //     open: true
+    //   },
     plugins: [
         new HTMLPlugin({
             filename: "index.html",
@@ -26,7 +35,7 @@ module.exports = {
           }
         ]
       },
-      optimization: {
+    optimization: {
         minimize: true,
         minimizer: [
           // For webpack@5 you can use the `...` syntax to extend existing minimizers (i.e. `terser-webpack-plugin`), uncomment the next line

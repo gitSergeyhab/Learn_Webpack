@@ -109,5 +109,18 @@
                     },
                     ...
                 }
+        10. devServer
+            10.1. установить с https://github.com/webpack/webpack-dev-server:
+                npm install webpack-dev-server --save-dev
+            10.2. 
+                module.exports = {
+                    ...
+                    devServer: {
+                        contentBase: path.resolve(__dirname, 'dist'),
+                        port: 4200
+                    },
+                    ...
+                }
+
 
 
