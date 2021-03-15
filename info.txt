@@ -1,0 +1,113 @@
+1. установить webpack webpack-cli - просто и глобально:
+    1.1 npm install --save-dev webpack webpack-cli
+    1.2 npm install -g webpack webpack-cli
+
+2. для запуска рабочей и продакшен версии в  package.json прописать "scripts":
+    "scripts": {
+        "dev": "webpack --mode development",
+        "build": "webpack --mode production"
+    }
+
+3. в корне создать webpack.config.js:
+
+    const path = require('path') - подключить модуль "path"
+
+    module.exports = {
+        entry: './src/index.js', - входной файл для сборки (перед этим создать "src/index.js")
+        output: {
+            filename: 'bundle.js', - выходной файл сборки
+            path: path.resolve(__dirname, 'dist') - папка, где лежит выходной файл
+        }
+    }
+
+4. В "src/" создать файлы, где будут храниться подключаемые модули.
+    Модули экспортируютя   =>   импортируются:
+        export const config = {key: '666999'}    =>   import {config} from './modules/config';
+        export default class AppService {constructor(text) {this.text = text} ... }   =>   import AppService from './modules/app.service';
+        (без экспорта)   =>   import './modules/header.component'
+
+5. установить HtmlWebpackPlugin (с https://webpack.js.org/plugins/html-webpack-plugin/):
+    npm install --save-dev html-webpack-plugin
+
+    5.1. подключить в webpack.config.js:
+        const HTMLPlugin = require('html-webpack-plugin'); - подключает скрипты в хтмл
+    5.2. там же подключить плагин:
+        module.exports = {
+            ...
+            plugins: [
+                new HTMLPlugin({
+                    filename: "index.html",    - этот файл уже с подключенными скриптами создасться в "dist/"
+                    template: './src/index.html'     -  файл, к которому подключатся скрипты
+                })
+            ]
+        }
+    5.3. запустить ...
+
+    6. работа со сторонними библиотекми
+        6.1. установить jquery:
+            npm i -S jquery
+        6.2. 
+            import $ from 'jquery';
+
+        6.3. для автоматической пересборки после изменения:
+            "dev-watch": "webpack --mode development --watch"
+
+    7. Стили
+        7.1. Установить пакет css-loader (с https://webpack.js.org/loaders/):
+            npm install --save-dev css-loader
+        7.2. добавить стили в /src/css/style.css
+        7.3. прописать правила для модуля:
+            module: {
+                rules: [
+                    {
+                        test: /\.css$/i,     - с помощью регулярок указать файлы, которые обрабатываются лоадером ...
+                        use: "style-loader"  -  ... этим лоадером
+                    }
+                ]
+            }
+        7.4. подключить css файл в индекс.джиэс:
+            import css from './css/style.css'
+
+        7.5. Установить пакет css-loader (с https://webpack.js.org/loaders/):
+            npm install --save-dev style-loader
+        7.6 добавить:
+            use: "style-loader"   =>     use: ['style-loader', 'css-loader']
+
+        7.7. Можно прописать стили в разных файлах и подключить все в один (который импортирован - п7.4.):
+            7.7.1. создасть "header.css", прописать стили для хедера и подключить в "style.css":
+                @import "header.css";
+        7.8. подключить css файл в индекс.джиэс млжно и без переменной:
+            import './css/style.css';
+
+        (PS. Стили здесь подключаются как инлайновые -> через файл - см п 8)
+
+
+        8. Подключение css одним файлом
+            8.1. Установить плагин MiniCssExtractPlugin (с https://webpack.js.org/plugins/mini-css-extract-plugin/):
+                npm install --save-dev mini-css-extract-plugin
+            8.2. const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+            8.3.   use: ['style-loader', 'css-loader']   ->   use: [MiniCssExtractPlugin.loader, 'css-loader']
+            8.4.     
+            plugins: [
+                ... ,
+                new MiniCssExtractPlugin({filename: 'allstyle.css'}) - сюда будут "собираться все стили"
+            ],
+
+        9. Минимизация for production
+            9.1. CssMinimizerWebpackPlugin c https://webpack.js.org/plugins/css-minimizer-webpack-plugin/: 
+                npm install css-minimizer-webpack-plugin --save-dev
+            9.2. const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
+            9.3.
+                module.exports = {
+                    ...
+                    optimization: {
+                        minimize: true,
+                        minimizer: [
+                        `...`,
+                        new CssMinimizerPlugin({}),
+                        ],
+                    },
+                    ...
+                }
+
+
