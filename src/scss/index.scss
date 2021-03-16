@@ -1,0 +1,18 @@
+$margin: 20px;
+
+hr {
+   margin: $margin; 
+}
+
+.sass {
+    padding: $margin;
+    &-title {
+        margin-bottom: $margin;
+        text-align: center;
+        color: red;
+    }
+
+    &-text {
+        margin-bottom: 33px;
+    }
+}

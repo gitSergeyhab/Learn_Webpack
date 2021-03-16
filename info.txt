@@ -1,6 +1,6 @@
-1. установить webpack webpack-cli - просто и глобально:
-    1.1 npm install --save-dev webpack webpack-cli
-    1.2 npm install -g webpack webpack-cli
+1. установить webpack webpack-cli - просто и глобально!:
+    1.1. npm install --save-dev webpack webpack-cli
+    1.2. npm install -g webpack webpack-cli
 
 2. для запуска рабочей и продакшен версии в  package.json прописать "scripts":
     "scripts": {
@@ -36,7 +36,7 @@
             ...
             plugins: [
                 new HTMLPlugin({
-                    filename: "index.html",    - этот файл уже с подключенными скриптами создасться в "dist/"
+                    filename: "index.html",    - этот файл уже с подключенными скриптами создастся в "dist/"
                     template: './src/index.html'     -  файл, к которому подключатся скрипты
                 })
             ]
@@ -65,7 +65,7 @@
                     }
                 ]
             }
-        7.4. подключить css файл в индекс.джиэс:
+        7.4. подключить css в индекс.джиэс:
             import css from './css/style.css'
 
         7.5. Установить пакет css-loader (с https://webpack.js.org/loaders/):
@@ -121,6 +121,73 @@
                     },
                     ...
                 }
+            10.3. Добавить скрипт для запуска девсервера 
+              "scripts": {
+                ...
+                "start": "webpack serve --mode development --open"  (--open -срвзу открывает вкладку в браузере) webpack serve !!!
+            },
+
+        11. BABEL
+            11.1. установить с https://babeljs.io/docs/en/usage:
+                11.1.1. npm install --save-dev @babel/core @babel/cli @babel/preset-env
+                11.1.2. npm install --save @babel/polyfill            --??? устарел
+            11.2  добавить в webpack.config.js:
+                module: {
+                    rules: [
+                        ...
+                        {
+                            test: /\.m?js$/,
+                            exclude: /node_modules/,
+                            use: {
+                                loader: "babel-loader",
+                                options: {
+                                    presets: ['@babel/preset-env']
+                                }
+                            }
+                        }
+                    ]
+                }
+            11.3.  установить babel-loader с https://webpack.js.org/loaders/babel-loader/:
+                npm install -D babel-loader
+
+            11.4. Созать в корне .babelrc и прописать настройки
+                {
+                    "presets": [
+                        ["@babel/preset-env", {
+                            "targets": [
+                                "last 5 versions" // поддерать последние 5 версий браузеров
+                            ]
+                        }]
+                    ]
+                }
+
+            12. Препроцессоры - Less
+                12.1. создать src/Less/index.less, написать стили
+                12.2. Установить less и less-loader c https://webpack.js.org/loaders/less-loader/:
+                    npm install less less-loader --save-dev
+                12.3. Добавить в  rules:
+                    {
+                        test: /\.less$/i,
+                        use: [MiniCssExtractPlugin.loader, 'css-loader', 'less-loader']
+                    },
+                12.4. В index.js добавить импорт
+                    import './less/index.less'
+
+            13. Sass - то же самое:
+                13.1. создать src/scss/index.less, написать стили
+                13.2. Установить less и less-loader c https://webpack.js.org/loaders/sass-loader/:
+                    npm install sass-loader sass --save-dev
+                13.3. Добавить в  rules:
+                    {
+                        test: /\.scss$/i,
+                        use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader']
+                    },
+                13.4. В index.js добавить импорт
+                    import './scss/index.scss'
+
+             
+
+
 
 
 
